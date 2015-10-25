@@ -1442,6 +1442,7 @@ module.exports = AudioPlayer;
 },{"./Abstract.js":7,"util":5}],9:[function(require,module,exports){
 var AbstractPlayer = require('./Abstract.js');
 var util = require('util');
+var getVimeoIdFromUrl = require('../util/getVimeoIdFromUrl.js');
 
 function VimeoPlayer() {
     var me = this,
@@ -1605,7 +1606,7 @@ function VimeoPlayer() {
 
     function createPlayer(id) {
         var dom = document.getElementById(domId),
-            url = 'http://player.vimeo.com/video/' + id,
+            url = 'https://player.vimeo.com/video/' + id,
             html = '<iframe id="' + playerId + '" src="' + url + '?api=1&player_id=' + playerId + '&badge=0&byline=0&portrait=0&title=0&color=ffc70a" width="100%" height="100%" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>';
         dom.innerHTML = html;
         player = document.getElementById(playerId);
@@ -1627,19 +1628,15 @@ function VimeoPlayer() {
 
 VimeoPlayer.count = 0;
 
-VimeoPlayer.getIdFromUrl = function(url) {
-    if (!url)
-        return null;
-    var m = url.match(/https?:\/\/vimeo\.com\/(\d+)/i);
-    return m && m[1];
-}
+VimeoPlayer.getIdFromUrl = getVimeoIdFromUrl;
 
 util.inherits(VimeoPlayer, AbstractPlayer);
 
 module.exports = VimeoPlayer;
-},{"./Abstract.js":7,"util":5}],10:[function(require,module,exports){
+},{"../util/getVimeoIdFromUrl.js":11,"./Abstract.js":7,"util":5}],10:[function(require,module,exports){
 var AbstractPlayer = require('./Abstract.js');
 var util = require('util');
+var getYTIdFromUrl = require('../util/getYTIdFromUrl.js');
 
 function YTPlayer() {
     var me = this,
@@ -1818,7 +1815,20 @@ function YTPlayer() {
 
 YTPlayer.count = 0;
 
-YTPlayer.getIdFromUrl = function(ytUrl) {
+YTPlayer.getIdFromUrl = getYTIdFromUrl;
+
+util.inherits(YTPlayer, AbstractPlayer);
+
+module.exports = YTPlayer;
+},{"../util/getYTIdFromUrl.js":12,"./Abstract.js":7,"util":5}],11:[function(require,module,exports){
+module.exports = function(url) {
+    if (!url)
+        return null;
+    var m = url.match(/https?:\/\/vimeo\.com\/(\d+)/i);
+    return m && m[1];
+};
+},{}],12:[function(require,module,exports){
+module.exports = function(ytUrl) {
     var m;
     return ytUrl &&
         (m = ytUrl.match(/(?:(?:https?:)?\/\/)?(?:www\.)?youtu(?:be\.com\/(?:watch\?(?:.*?&(?:amp;)?)*v=|v\/|embed\/)|\.be\/)([\w‌​\-]+)(?:(?:&(?:amp;)?|\?)[\w\?=]*)*/)) != null &&
@@ -1849,8 +1859,4 @@ YTPlayer.getIdFromUrl = function(ytUrl) {
         }, {});
     }
 }
-
-util.inherits(YTPlayer, AbstractPlayer);
-
-module.exports = YTPlayer;
-},{"./Abstract.js":7,"util":5}]},{},[6]);
+},{}]},{},[6]);

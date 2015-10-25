@@ -1,5 +1,6 @@
 var AbstractPlayer = require('./Abstract.js');
 var util = require('util');
+var getVimeoIdFromUrl = require('../util/getVimeoIdFromUrl.js');
 
 function VimeoPlayer() {
     var me = this,
@@ -163,7 +164,7 @@ function VimeoPlayer() {
 
     function createPlayer(id) {
         var dom = document.getElementById(domId),
-            url = 'http://player.vimeo.com/video/' + id,
+            url = 'https://player.vimeo.com/video/' + id,
             html = '<iframe id="' + playerId + '" src="' + url + '?api=1&player_id=' + playerId + '&badge=0&byline=0&portrait=0&title=0&color=ffc70a" width="100%" height="100%" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>';
         dom.innerHTML = html;
         player = document.getElementById(playerId);
@@ -185,12 +186,7 @@ function VimeoPlayer() {
 
 VimeoPlayer.count = 0;
 
-VimeoPlayer.getIdFromUrl = function(url) {
-    if (!url)
-        return null;
-    var m = url.match(/https?:\/\/vimeo\.com\/(\d+)/i);
-    return m && m[1];
-}
+VimeoPlayer.getIdFromUrl = getVimeoIdFromUrl;
 
 util.inherits(VimeoPlayer, AbstractPlayer);
 
